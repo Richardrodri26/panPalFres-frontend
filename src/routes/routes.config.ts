@@ -10,6 +10,7 @@ export interface INavMenuOptions {
 
 export const routerPaths = {
     home: { path: "/", label: "Inicio de sesión" },
+    register: { path: "/registrarse", label: "Registro de usuario" },
     admin: {
         path: "/dashboard", label: "Inicio", children: {
             details: { path: "detalles", label: "Detalles" },

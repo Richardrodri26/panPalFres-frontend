@@ -32,7 +32,7 @@ export const TotalPurchaseList = () => {
           <div key={index} className="flex items-center gap-2">
             <div className="flex flex-col gap-1">
               <p className="font-semibold">{item.date}</p>
-              <p>{item.product}</p>
+              <p>Producto: {item.product}</p>
             </div>
 
             <Edit2 className="h-4 w-4 cursor-pointer hover:stroke-blue-500" />
