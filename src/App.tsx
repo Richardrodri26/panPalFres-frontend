@@ -11,12 +11,10 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-
-    
       <RouterProvider router={appRouter} />
-      <Toaster richColors/>
+      <Toaster richColors />
       <AlertRoot />
-      </QueryClientProvider>
+    </QueryClientProvider>
   )
 }
 

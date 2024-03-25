@@ -24,7 +24,6 @@ export const appRouter = createBrowserRouter([
                     { path: "", element: <HomePage />, index: true },
                     {
                         path: adminRoutes.details.path, children: [
-                            // { path: "", element: <PayrollGroupPage />, index: true },
                             { path: "", element: <>Detail Page</>, index: true },
                         ]
                     },
