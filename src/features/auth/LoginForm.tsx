@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 
 export const LoginForm = () => {
   const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('') 
+  const [password, setPassword] = useState<string>('')
   // const [dataBackend, setDataBackend] = useState() 
 
   const navigate = useNavigate()
@@ -24,17 +24,22 @@ export const LoginForm = () => {
   // Enviar informacion al backend
 
   const loginBackend = async () => {
-    const resLogin = await fetch('http://localhost:3000/auth/login', { 
+    const resLogin = await fetch('http://localhost:3000/auth/login', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Tipo de contenido que estamos enviando
+      },
       body: JSON.stringify({
-        email: email,
-        password: password,
+        email: 'prueba@email.com',
+        password: '123456789',
+        // email: email,
+        // password: password,
       })
-     })
+    })
 
-     console.log('resLogin', resLogin)
+    console.log('resLogin', resLogin)
 
-  } 
+  }
 
 
   const onSubmit = (data: loginSchemaType) => {
@@ -52,8 +57,8 @@ export const LoginForm = () => {
     <BasicFormProvider submit={onSubmit} schema={loginSchema}>
       <p className="text-[#605DEC] text-xl font-semibold">Iniciar sesión</p>
 
-      <input placeholder="Prueba" type="text" value={email} onChange={(event) => {setEmail(event.target.value)}} />
-      <input placeholder="password" type="text" value={password} onChange={(event) => {setPassword(event.target.value)}} />
+      <input placeholder="Prueba" type="text" value={email} onChange={(event) => { setEmail(event.target.value) }} />
+      <input placeholder="password" type="text" value={password} onChange={(event) => { setPassword(event.target.value) }} />
 
       {/* <InputForm name="email" label="Correo electronico" />
       <InputForm name="password" label="Contraseña" /> */}

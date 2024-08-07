@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 
 export const TopBar = () => {
   const navigate = useNavigate();
-  
+
   const onLogout = () => {
     navigate("/")
   }
