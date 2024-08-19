@@ -1,6 +1,6 @@
 import { Outlet, createBrowserRouter } from "react-router-dom";
 import { adminRoutes, routerPaths } from "./routes.config";
-import { HomePage, LoginPage, RegisterPage } from "@/pages";
+import { HomePage, LoginPage, Products, RegisterPage } from "@/pages";
 import { AdminLayout } from "@/components/Layouts";
 
 export const appRouter = createBrowserRouter([
@@ -27,6 +27,11 @@ export const appRouter = createBrowserRouter([
                             { path: "", element: <>Detail Page</>, index: true },
                         ]
                     },
+                    {
+                        path: adminRoutes.products.path, children: [
+                            { path: "", element: <Products /> }
+                        ]
+                    }
                 ]
             },
             {

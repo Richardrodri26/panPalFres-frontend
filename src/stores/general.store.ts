@@ -1,9 +1,11 @@
 "use client";
+import { LoginInterface } from "@/interfaces";
 import { create, StateCreator } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
+import { produce } from 'immer';
 
 export type AlertTypes = "success" | "info" | "error" | "warning" | "custom";
 interface IAlertContent {
@@ -24,6 +26,9 @@ export interface IModal {
 }
 
 export interface IGeneral {
+  userInfo?: LoginInterface
+  isLogged?: boolean
+
   isOpenMenu: boolean;
 
   currentAlert?: IAlertContent;
@@ -33,6 +38,7 @@ export interface IGeneral {
 
 export interface IGeneralActions {
   setIsOpenMenu: (isOpen: boolean) => void;
+  setLoginUser: (data: LoginInterface) => void,
   logout: () => void;
   setCurrentAlert: (currentAlert?: IAlertContent) => void;
   setModalStatus: (status?: IModal) => void;
@@ -45,6 +51,13 @@ const storeApi: StateCreator<
   [["zustand/devtools", never], ["zustand/immer", never]]
 > = (set, get) => ({
   isOpenMenu: false,
+
+  setLoginUser: (data) => {
+    set(produce((draft: IGeneral) => {
+        draft.isLogged = true
+        draft.userInfo = data
+    }), false, { type: "general/setLoginUser" })
+},
 
   setIsOpenMenu: (isOpen) => {
     set(

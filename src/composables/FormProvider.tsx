@@ -1,8 +1,10 @@
 import { z } from 'zod';
-import { DeepPartial, DefaultValues, FieldErrors, FormProvider, useForm, SubmitErrorHandler } from 'react-hook-form';
+import { DeepPartial, DefaultValues, FieldErrors, FormProvider, useForm, SubmitErrorHandler, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import { Form } from '@/components/ui/form';
+import { Button, ButtonProps } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 // Definimos un tipo auxiliar para DeepPartial que trabaje mejor con Zod
 type DeepPartialWithZod<T extends z.ZodObject<any, any>> = {
@@ -35,4 +37,19 @@ export function BasicFormProvider<T extends z.ZodObject<any, any>>({ children, s
       </Form>
     </form>
   );
+}
+
+export const RowForm = (props: HTMLAttributes<HTMLDivElement>) => {
+  return <div className={cn('mb-2.5 flex w-full flex-1 gap-2.5', props.className)} {...props} />;
+};
+
+interface IButtonFormProps extends ButtonProps {
+  resetForm?: boolean
+}
+
+export const ButtonForm = ({ disabled, resetForm = false, onClick, ...rest }: IButtonFormProps) => {
+  const { formState: { isValid }, reset } = useFormContext()
+  return (
+    <Button onClick={(e) => {onClick && onClick(e)}} disabled={!isValid || disabled} {...rest}  />
+  )
 }

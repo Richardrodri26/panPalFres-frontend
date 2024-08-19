@@ -1,4 +1,4 @@
-import { shallowEqual } from '@/utils/functions';
+import { shallowEqual } from '@/lib/utils';
 import { useEffect, useRef } from 'react';
 
 function shallowCompare(prevValue?: React.DependencyList | null, currValue?: React.DependencyList) {
