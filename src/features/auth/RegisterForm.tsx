@@ -6,8 +6,14 @@ import { useNavigate } from "react-router-dom"
 export const RegisterForm = () => {
   const navigate = useNavigate()
 
+  const urlBackend = import.meta.env.VITE_APP_BACKEND
+
   const onSubmit = (data: registerSchemaType) => {
     navigate("/dashboard")
+
+    //NOTE: Aqui debe estar el enviar peticion al backend para crear usuario
+    
+
   }
 
   return (

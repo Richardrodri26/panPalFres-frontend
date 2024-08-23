@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { ProductInterface } from "@/interfaces";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -13,6 +14,15 @@ export const productsColumns = [
   }),
   columnHelperProducts.accessor('price', {
     header: 'Precio'
+  }),
+
+  columnHelperProducts.display({
+    id: 'acciones',
+    cell: ({ row }) => {
+      const productId = row.original.id
+
+      return (<Button>Eliminar</Button>)
+    }
   })
   
 ]
