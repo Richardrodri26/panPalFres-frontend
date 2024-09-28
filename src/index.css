@@ -72,13 +72,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    background: #f1f1f1;
   }
 }
 
 .card {
-  @apply bg-white rounded-md shadow-md p-2.5
+  @apply bg-white rounded-md shadow-md p-2.5;
 }
 
 .title {
-  @apply text-[#605DEC] text-xl font-medium
+  @apply text-[#605DEC] text-xl font-medium;
 }
