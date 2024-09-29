@@ -13,16 +13,24 @@ import {
 } from "@/components/ui/tooltip";
 import { CollapseMenuButton } from "./Collapse-menu-button";
 import { getMenuList } from "@/lib/menu-list";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useGeneral } from "@/stores";
 
 interface MenuProps {
   isOpen: boolean | undefined;
 }
 
 export function Menu({ isOpen }: MenuProps) {
+  const navigate = useNavigate()
+  const logout = useGeneral(state => state.logout)
   const pathname = useLocation().pathname;
   const menuList = getMenuList(pathname);
   // const router = useRouter()
+
+  const onLogout = () => {
+    logout()
+    navigate('/')
+  }
 
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
@@ -110,7 +118,7 @@ export function Menu({ isOpen }: MenuProps) {
                 <div className={cn("mt-auto w-full flex-1 flex items-center gap-2 justify-between", { "mt-0": isOpen === false })}>
                   <TooltipTrigger asChild>
                     <Button
-                      // onClick={() => { signOut(); router.replace("/"); }}
+                      onClick={onLogout}
                       variant="outline"
                       className="w-full justify-center"
                     >
