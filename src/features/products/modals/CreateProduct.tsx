@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { CreateProductForm } from "../forms/CreateProduct";
 import { BasicFormProvider } from "@/composables";
-import { productSchema, productSchemaType } from "../schema";
+import { createProductSchema, createProductSchemaType } from "../schema";
 import { useMutation } from "react-query";
 import { axiosInstance } from "@/domain/api.config";
 import { panPalFresEndpoints } from "@/domain/endpoints";
@@ -19,7 +19,7 @@ interface ICreateProductModalProps {
 
 export const CreateProductModal = ({ modalState }: ICreateProductModalProps) => {
   const { mutateAsync } = useMutation({
-    mutationFn: async (data: productSchemaType) => {
+    mutationFn: async (data: createProductSchemaType) => {
       try {
         const productData = await axiosInstance.post(panPalFresEndpoints.PRODUCTS, data);
 
@@ -42,19 +42,19 @@ export const CreateProductModal = ({ modalState }: ICreateProductModalProps) => 
   return (
     <Dialog onOpenChange={modalState.setter} open={modalState.value}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Crear producto</DialogTitle>
+        <BasicFormProvider submit={mutateAsync} className="p-0" schema={createProductSchema}>
+          <DialogHeader>
+            <DialogTitle>Crear producto</DialogTitle>
+          </DialogHeader>
           <DialogDescription>
             Por favor rellena los campos solicitados.
-
-            <BasicFormProvider submit={mutateAsync} className="p-0" schema={productSchema}>
-
-              <CreateProductForm />
-            </BasicFormProvider>
-
           </DialogDescription>
-        </DialogHeader>
 
+
+            <CreateProductForm />
+
+
+        </BasicFormProvider>
       </DialogContent>
     </Dialog>
   )

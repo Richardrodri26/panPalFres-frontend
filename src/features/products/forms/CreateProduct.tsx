@@ -1,9 +1,9 @@
 import { FormButton } from "@/components/ui/button"
-import { BasicFormProvider, InputForm, RowForm } from "@/composables"
+import { InputForm, RowForm } from "@/composables"
 
 
 
-export const CreateProductForm = () => {
+export const CreateProductForm = ({ isUpdateForm = false }: { isUpdateForm?: boolean }) => {
 
   return (
     <>
@@ -17,7 +17,7 @@ export const CreateProductForm = () => {
       <InputForm name="description" label="Descripción del producto" />
 
       <FormButton>
-        Crear producto
+        {isUpdateForm ? 'Editar' : 'Crear'} producto
       </FormButton>
 
 

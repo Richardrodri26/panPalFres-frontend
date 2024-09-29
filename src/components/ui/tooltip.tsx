@@ -25,4 +25,37 @@ const TooltipContent = React.forwardRef<
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
+export const BasicTooltip = ({
+  content,
+  tooltip,
+  tooltipClassName,
+  asChild = false,
+  contentProps,
+  triggerClassName,
+  triggerProps,
+}: {
+  content: React.ReactNode;
+  tooltip: React.ReactNode;
+  tooltipClassName?: string;
+  asChild?: boolean;
+  contentProps?: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>;
+  triggerClassName?: string;
+  triggerProps?: TooltipPrimitive.TooltipTriggerProps & React.RefAttributes<HTMLButtonElement>;
+}) => {
+  return (
+    <TooltipProvider delayDuration={75}>
+      <Tooltip>
+        <TooltipTrigger asChild={asChild} className={cn(triggerClassName ?? 'flex items-center')} type='button' {...triggerProps}>
+          {content}
+        </TooltipTrigger>
+
+        <TooltipContent className={cn(tooltipClassName)} {...contentProps}>
+          <label className='capitalize-first'>{tooltip}</label>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
+
+
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
