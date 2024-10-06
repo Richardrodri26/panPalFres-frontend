@@ -14,7 +14,10 @@ export const routerPaths = {
     admin: {
         path: "/dashboard", label: "Inicio", children: {
             details: { path: "detalles", label: "Detalles" },
-            products: { path: "productos", label: "Productos" }
+            products: { path: "productos", label: "Productos" },
+            users: { path: 'users', label: 'Usuarios', children: [
+                { path: 'new-user', label: 'Crear usuario'}
+            ] }
         },
         
     },

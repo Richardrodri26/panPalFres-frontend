@@ -1,24 +1,24 @@
-import { DataTable, PaginationTable } from "@/components"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, DataTable, PaginationTable } from "@/components"
 import { axiosInstance } from "@/domain/api.config"
-import { panPalFresEndpoints } from "@/domain/endpoints"
-import { ProductInterface, WrapDataWithPagination } from "@/interfaces"
 import { useState } from "react"
 import { useQuery } from "react-query"
-import { productsColumns } from "./columns"
+import { columnsUser } from "./columns"
+import { ValidateUserResponse, WrapDataWithPagination } from "@/interfaces"
+import { panPalFresEndpoints } from "@/domain/endpoints"
+
 
 
 const takeValue = 10
 
-export const AllProductsGrid = () => {
+export const AllUsersGrid = () => {
   const [skip, setSkip] = useState(0)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['products', `${skip}-${takeValue}`],
+    queryKey: ['users', `${skip}-${takeValue}`],
     queryFn: async () => {
-      const productsData = await axiosInstance.get<WrapDataWithPagination<ProductInterface[]>>(panPalFresEndpoints.PRODUCTS + `?limit=${takeValue}&offset=${skip}`)
+      const usersData = await axiosInstance.get<WrapDataWithPagination<ValidateUserResponse[]>>(panPalFresEndpoints.USERS + `?limit=${takeValue}&offset=${skip}`)
 
-      return productsData.data
+      return usersData.data
     }
   })
 
@@ -26,13 +26,13 @@ export const AllProductsGrid = () => {
     <>
       <Card x-chunk="dashboard-06-chunk-0">
         <CardHeader>
-          <CardTitle>Productos</CardTitle>
+          <CardTitle>Usuarios</CardTitle>
           <CardDescription>
-            Gestiona los productos del sistema.
+            Gestiona los usuarios del sistema.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable columns={productsColumns as any} data={data?.data || []} isLoading={!data && isLoading} />
+          <DataTable columns={columnsUser as any} data={data?.data || []} isLoading={!data && isLoading} />
         </CardContent>
         <CardFooter>
           {!data && isLoading
