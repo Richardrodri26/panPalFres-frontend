@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { DeepPartial, DefaultValues, FieldErrors, FormProvider, useForm, SubmitErrorHandler, useFormContext } from 'react-hook-form';
+import { DefaultValues, useForm, SubmitErrorHandler, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { HTMLAttributes } from 'react';
 import { Form } from '@/components/ui/form';
@@ -21,7 +21,7 @@ interface ISubmitModulesForm<T extends z.ZodObject<any, any> = z.ZodObject<any, 
   className?: string;
 }
 
-export function BasicFormProvider<T extends z.ZodObject<any, any>>({ children, submit, onError, defaultValue, values, schema, className = 'p-10' }: ISubmitModulesForm<T>) {
+export function BasicFormProvider<T extends z.ZodObject<any, any>>({ children, submit, onError, defaultValue, schema, className = 'p-10' }: ISubmitModulesForm<T>) {
   // hooks
   const currentMethods = useForm({
     defaultValues: defaultValue,

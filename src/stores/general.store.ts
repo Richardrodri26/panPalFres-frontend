@@ -6,6 +6,7 @@ import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
 import { produce } from 'immer';
+import Cookies from "js-cookie";
 
 export type AlertTypes = "success" | "info" | "error" | "warning" | "custom";
 interface IAlertContent {
@@ -69,7 +70,13 @@ const storeApi: StateCreator<
     );
   },
 
-  logout: () => {},
+  logout: () => {
+    Cookies.remove(import.meta.env.VITE_APP_KEY_COOKIE_SESSION);
+    set(draft => {
+      draft.userInfo = undefined;
+      draft.isLogged = false
+    })
+  },
 
   setCurrentAlert: (currentAlert) => {
     set((state) => {

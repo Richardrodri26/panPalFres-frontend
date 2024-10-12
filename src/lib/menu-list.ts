@@ -32,9 +32,9 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "",
       menus: [
         {
-          href: "/home",
+          href: "/dashboard",
           label: "Dashboard",
-          active: pathname.includes("/home") && pathname.length === 5,
+          active: pathname.includes("/dashboard") && pathname.length === 5,
           icon: LayoutGrid,
           submenus: []
         }
@@ -44,7 +44,7 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "",
       menus: [
         {
-          href: "/home/profile",
+          href: "/dashboard/profile",
           label: "Perfil",
           active: pathname.includes("/profile"),
           icon: User,
@@ -56,22 +56,23 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Opciones de administrador",
       menus: [
         {
-          href: "",
+          href: `/dashboard/${adminRoutes.users.path}`,
           label: "Usuarios",
           active: pathname.includes("/posts"),
           icon: Users2,
-          submenus: [
-            {
-              href: "/home/users",
-              label: "Usuarios",
-              active: pathname === "/home/users"
-            },
-            {
-              href: "/home/users/new-user",
-              label: "Nuevo usuario",
-              active: pathname === "/home/users/new-user"
-            }
-          ]
+          submenus: []
+          // submenus: [
+          //   {
+          //     href: "/dashboard/users",
+          //     label: "Usuarios",
+          //     active: pathname === "/dashboard/users"
+          //   },
+          //   {
+          //     href: "/dashboard/users/new-user",
+          //     label: "Nuevo usuario",
+          //     active: pathname === "/dashboard/users/new-user"
+          //   }
+          // ]
         },
 
         {

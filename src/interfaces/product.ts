@@ -5,4 +5,5 @@ export interface ProductInterface {
   description: string;
   slug:        string;
   images:      string[];
+  stock:       number;
 }

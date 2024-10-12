@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ProductInterface } from "@/interfaces";
 import { createColumnHelper } from "@tanstack/react-table";
+import { TdActionProduct } from "./elements/TdActionProduct";
 
 
 const columnHelperProducts = createColumnHelper<ProductInterface>()
@@ -16,12 +17,16 @@ export const productsColumns = [
     header: 'Precio'
   }),
 
+  columnHelperProducts.accessor('stock', {
+    header: 'Stock'
+  }),
+
   columnHelperProducts.display({
     id: 'acciones',
     cell: ({ row }) => {
-      const productId = row.original.id
+      const productData = row.original
 
-      return (<Button>Eliminar</Button>)
+      return (<TdActionProduct data={productData} />)
     }
   })
   
