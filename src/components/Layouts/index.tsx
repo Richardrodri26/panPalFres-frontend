@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom"
-import { TopBar } from "../TopBar"
 import { useSidebarToggle, useStore, useValidateUser } from "@/hooks";
 import { cn } from "@/lib/utils"
 import { Sidebar } from "@/composables/SideMenu";
