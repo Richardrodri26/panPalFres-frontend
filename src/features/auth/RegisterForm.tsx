@@ -1,90 +1,65 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { BasicFormProvider } from "@/composables";
-import { registerSchema, registerSchemaType } from "..";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { BasicFormProvider, InputForm } from "@/composables"
+import { registerSchema, registerSchemaType } from ".."
+import { FormButton } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom"
+import { useMutation } from "react-query"
+import { axiosInstance } from "@/domain/api.config"
+import { panPalFresEndpoints } from "@/domain/endpoints"
+import   Cookies from 'js-cookie'
+import { LoginInterface } from "@/interfaces"
+import { useGeneral } from "@/stores"
 
 export const RegisterForm = () => {
-  const [email, setEmail] = useState<string>(""); // Almacenar el email
-  const [password, setPassword] = useState<string>(""); // Almacenar la contraseña
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Almacenar el mensaje de error si ocurre
-  const navigate = useNavigate();
+  const setLoginUser = useGeneral(state => state.setLoginUser)
+  const { mutateAsync } = useMutation({
+    mutationFn: async (data: registerSchemaType) => {
+      try {
+        // Aquí se realiza la petición POST para el registro
+        const resMutation = await axiosInstance.post<LoginInterface>(panPalFresEndpoints.REGISTER, data)
+        const res = resMutation.data
 
-  // Enviar informacion al backend
+        if (res) {
+          // Guardamos el token en las cookies
+          Cookies.set(import.meta.env.VITE_APP_KEY_COOKIE_SESSION, res?.token)
 
-  const registerBackend = async () => {
-    try {
-      const createUser = await fetch("http://localhost:3000/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+          // Establecemos el usuario registrado
+          setLoginUser(res)
 
-      if (!createUser.ok) {
-        // Si el código de estado no está en el rango 200-299
-        throw new Error(`Error: ${createUser.status} ${createUser.statusText}`);
+          // Redirigimos al dashboard
+          navigate("/login")
+        }
+      } catch (error) {
+        // Manejo de errores si la mutación falla
+        console.error("Error durante el registro:", error)
       }
-
-      const data = await createUser.json(); // Obtener los datos en formato JSON
-      console.log("Usuario registrado exitosamente:", data);
-
-      return data; // Si quieres devolver los datos de la respuesta
-      
-    } catch (error) {
-      setErrorMessage(
-        "Hubo un problema con el registro. Por favor, verifica tus datos."
-      );
-      console.error("Hubo un problema en la solicitud de registro:", error);
     }
-  };
-  // Función para manejar el submit del formulario
-  const onSubmit = (data: registerSchemaType) => {
-    navigate("/dashboard");
-    registerBackend(); // Llamar a la función de login
-  };
+  })
 
-  // Función para redirigir a la página de registro
-  const goToRegister = () => {
-    navigate("/registrarse");
-  };
+  const navigate = useNavigate()
 
-  
-    
-
-  return (
-    <BasicFormProvider submit={onSubmit} schema={registerSchema}>
-      <p className="text-[#605DEC] text-xl font-semibold">Iniciar sesión</p>
-
-      <label>corre electronico</label>
-
-      {/* Campo de email */}
-      <input className="border border-red-500"
-        name="email"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-      />
-
-      <label className="sol">contraseña</label>
-      {/* Campo de contraseña */}
-      <input className="border border-red-500"
-        name="password"
-        type="password"
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-      />
-
-      {/* Mostrar mensaje de error si existe */}
-      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-
-      {/* Botón para ingresar */}
-      <Button onClick={registerBackend}>REGISTRAR</Button>
-    </BasicFormProvider>
-  );
+  const onSubmit = async (data: registerSchemaType) => {
+     // Aqui es donde normalmente se envia la informacion al backend (puedes user fetch, axios junto con tanstack query si deseas)
+    await mutateAsync(data)
   }
 
+  
+  return (
+    <BasicFormProvider submit={onSubmit} schema={registerSchema}>
+      <h2 className="text-3xl font-semibold text-[#605DEC] p-0 text-center">
+        REGISTRO
+      </h2>
+      <p className="text-[#c7b871] text-xl font-bold mt-4">Crear una nueva cuenta</p>
+
+      {/* Campos del formulario de registro */}
+      <InputForm name="email" label="Correo electrónico"  />
+      <InputForm name="password" label="Contraseña" />
+      <InputForm name="fullName" label="Nombre Completo" />
+      
+
+      
+      <FormButton className="mt-5">
+        Registrarse
+      </FormButton>
+    </BasicFormProvider>
+  );
+};
