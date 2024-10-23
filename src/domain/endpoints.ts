@@ -5,5 +5,6 @@ export const panPalFresEndpoints = {
   PRODUCTS: '/products',
   VERIFY_USER: '/auth/check-status',
   USERS: '/auth/users',
-  CREATE_USER: '/auth/register'
+  CREATE_USER: '/auth/register',
+  TRANSACTIONS: '/transactions'
 } as const

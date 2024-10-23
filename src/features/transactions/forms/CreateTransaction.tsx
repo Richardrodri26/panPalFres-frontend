@@ -17,6 +17,24 @@ const formSteps = [
 
 export const CreateTransaction = () => {
 
+
+
+  return (
+    <div className="flex w-full flex-col gap-4">
+      <Stepper variant="circle-alt" size="sm" initialStep={0} steps={formSteps}>
+        <ControllerSteps />
+        {/* <Footer /> */}
+      </Stepper>
+    </div>
+  )
+}
+
+const ControllerSteps = () => {
+  const {
+    currentStep,
+    steps
+  } = useStepper()
+
   const [transactionForm, setTransactionForm] = useState<createTransactionSchemaType | undefined>(undefined);
 
   const addFormData = (data: any) => {
@@ -24,31 +42,11 @@ export const CreateTransaction = () => {
   }
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Stepper variant="circle-alt" size="sm" initialStep={0} steps={formSteps}>
-        <ControllerSteps addFormData={addFormData} />
-        <Footer />
-      </Stepper>
-    </div>
-  )
-}
-
-interface IControllerStepsProps {
-  addFormData: (data: any) => void;
-}
-
-
-const ControllerSteps = ({ addFormData }: IControllerStepsProps) => {
-  const {
-    currentStep,
-    steps
-  } = useStepper()
-  return (
     <>
       {
         ({
           [formSteps[0].id]: <CreateTransactionStepOne addFormData={addFormData} />,
-          [formSteps[1].id]: <CreateTransactionStepTwo addFormData={addFormData} />,
+          [formSteps[1].id]: <CreateTransactionStepTwo transactionForm={transactionForm} addFormData={addFormData} />,
         }[(currentStep?.id || (steps[0]?.id || ''))])
       }
     </>

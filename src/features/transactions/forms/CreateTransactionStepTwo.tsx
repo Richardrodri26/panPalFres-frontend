@@ -3,15 +3,19 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { BasicFormProvider, ButtonForm } from "@/composables"
 import { axiosInstance } from "@/domain/api.config"
 import { panPalFresEndpoints } from "@/domain/endpoints"
-import { IExternalState, ProductInterface, WrapDataWithPagination } from "@/interfaces"
+import { IExternalState, ProductInterface, Transaction, WrapDataWithPagination } from "@/interfaces"
 import { useState } from "react"
-import { useQuery } from "react-query"
+import { useMutation, useQuery } from "react-query"
+import { createTransactionSchemaType } from "../schemas"
+import { toast } from "sonner"
+import { queryClient } from "@/App"
 
 interface ICreateTransactionStepTwoProps {
   addFormData: (data: any) => void;
+  transactionForm?: createTransactionSchemaType
 }
 
-export const CreateTransactionStepTwo = ({ addFormData }: ICreateTransactionStepTwoProps) => {
+export const CreateTransactionStepTwo = ({ addFormData, transactionForm }: ICreateTransactionStepTwoProps) => {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const externalState: IExternalState<string[]> = { setter: setSelectedProducts, state: selectedProducts };
 
@@ -22,10 +26,38 @@ export const CreateTransactionStepTwo = ({ addFormData }: ICreateTransactionStep
 
       return productsData.data
     }
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async (data: createTransactionSchemaType) => {
+      try {
+        const { data: axiosData } = await axiosInstance.post<Transaction>(panPalFresEndpoints.TRANSACTIONS, data);
+        if (axiosData) {
+          toast.success("Transaccion creada con éxito")
+
+          // queryClient.refetchQueries({ queryKey: ['products'] })
+
+        }
+      } catch (error) {
+
+      }
+
+
+    }
   })
 
+  const onSubmitData = () => {
+    // addFormData({ products: data?.data?.filter(product => selectedProducts.includes(product.id)) })
+
+    const productsToSend = data?.data?.filter((product) => selectedProducts.includes(product.id)) || []
+
+    mutateAsync({ ...(transactionForm! || {}), products: productsToSend })
+  }
+
+  const hasSelectedProducts = selectedProducts.length > 0
+
   return (
-    <BasicFormProvider>
+    <BasicFormProvider submit={onSubmitData}>
       <ScrollArea className="max-h-[500px]">
 
         <ListProducts products={data?.data || []} selectedProductsState={externalState} />
@@ -33,7 +65,7 @@ export const CreateTransactionStepTwo = ({ addFormData }: ICreateTransactionStep
         <ScrollBar orientation="vertical" />
       </ScrollArea>
 
-      <ButtonForm className="mt-2">
+      <ButtonForm disabled={!hasSelectedProducts} className="mt-2">
         Crear transaccion
       </ButtonForm>
     </BasicFormProvider>
@@ -59,7 +91,7 @@ const ListProducts = ({ products, selectedProductsState }: IListProductsProps) =
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-y-3">
       {products.map(product => (
         <Card key={product.id}>
           <CardHeader>
@@ -78,6 +110,6 @@ const ListProducts = ({ products, selectedProductsState }: IListProductsProps) =
           </CardContent>
         </Card>
       ))}
-    </>
+    </div>
   )
 }
