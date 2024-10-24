@@ -107,6 +107,7 @@ const ListProducts = ({ products, selectedProductsState }: IListProductsProps) =
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">{product.description}</p>
+            <p className="text-sm text-muted-foreground">Stock: {product.stock}</p>
           </CardContent>
         </Card>
       ))}

@@ -1,4 +1,8 @@
+import { Skeleton } from "@/components";
+import { axiosInstance } from "@/domain/api.config";
+import { panPalFresEndpoints } from "@/domain/endpoints";
 import { Edit2, Trash2 } from "lucide-react"
+import { useQuery } from "react-query";
 
 
 const mockData: { date: string; product: string }[] = [
@@ -24,6 +28,19 @@ const mockData: { date: string; product: string }[] = [
 ]
 
 export const TotalPurchaseList = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['allTransaction'],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(panPalFresEndpoints.TRANSACTIONS);
+
+      return data
+    }
+  })
+
+  if(!data && isLoading) return <Skeleton className="size-4 rounded-md" />
+
+  console.log('data', data)
+
   return (
     <div className="flex flex-col gap-2">
 
