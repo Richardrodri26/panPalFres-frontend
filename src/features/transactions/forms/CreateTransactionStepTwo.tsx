@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Checkbox } from "@/components"
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Checkbox } from "@/components"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { BasicFormProvider, ButtonForm } from "@/composables"
 import { axiosInstance } from "@/domain/api.config"
@@ -12,14 +12,17 @@ import { queryClient } from "@/App"
 
 interface ICreateTransactionStepTwoProps {
   addFormData: (data: any) => void;
-  transactionForm?: createTransactionSchemaType
+  transactionForm?: createTransactionSchemaType,
+  closeModal: () => void 
 }
 
-export const CreateTransactionStepTwo = ({ addFormData, transactionForm }: ICreateTransactionStepTwoProps) => {
-  const [selectedProducts, setSelectedProducts] = useState<string[]>([])
-  const externalState: IExternalState<string[]> = { setter: setSelectedProducts, state: selectedProducts };
+export const CreateTransactionStepTwo = ({ transactionForm, closeModal }: ICreateTransactionStepTwoProps) => {
+  // const [selectedProducts, setSelectedProducts] = useState<string[]>([])
+  const [selectedProducts, setSelectedProducts] = useState<ProductTransactionInfo>({})
+  // const externalState: IExternalState<string[]> = { setter: setSelectedProducts, state: selectedProducts };
+  const externalState: IExternalState<ProductTransactionInfo> = { setter: setSelectedProducts, state: selectedProducts };
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['products', `createTransaction`],
     queryFn: async () => {
       const productsData = await axiosInstance.get<WrapDataWithPagination<ProductInterface[]>>(panPalFresEndpoints.PRODUCTS + `?limit=${99}&offset=${0}`)
@@ -35,7 +38,8 @@ export const CreateTransactionStepTwo = ({ addFormData, transactionForm }: ICrea
         if (axiosData) {
           toast.success("Transaccion creada con éxito")
 
-          // queryClient.refetchQueries({ queryKey: ['products'] })
+          queryClient.refetchQueries({ queryKey: ['allTransaction'] })
+          closeModal()
 
         }
       } catch (error) {
@@ -46,15 +50,24 @@ export const CreateTransactionStepTwo = ({ addFormData, transactionForm }: ICrea
     }
   })
 
-  const onSubmitData = () => {
-    // addFormData({ products: data?.data?.filter(product => selectedProducts.includes(product.id)) })
+  const onSubmitData = async () => {
 
-    const productsToSend = data?.data?.filter((product) => selectedProducts.includes(product.id)) || []
+    const productsToSend = data?.data
+    ?.filter((product) => Object.keys(selectedProducts).includes(product.id))
+    .map(product => ({
+      ...product,
+      stock: selectedProducts[product.id]
+    })) || [];
 
-    mutateAsync({ ...(transactionForm! || {}), products: productsToSend })
+  // console.log('productsToSend', productsToSend)
+
+    await mutateAsync({ ...(transactionForm! || {}), products: productsToSend })
+    // closeModal()
+
+
   }
 
-  const hasSelectedProducts = selectedProducts.length > 0
+  const hasSelectedProducts = Object.keys(selectedProducts).length > 0
 
   return (
     <BasicFormProvider submit={onSubmitData}>
@@ -72,45 +85,104 @@ export const CreateTransactionStepTwo = ({ addFormData, transactionForm }: ICrea
   )
 }
 
+// interface ProductTransactionInfo {
+//   id: string;
+//   quantity: number
+// }
+export type ProductTransactionInfo = Record<string, number>
+
 interface IListProductsProps {
   products: ProductInterface[];
-  selectedProductsState: IExternalState<string[]>
+  // selectedProductsState: IExternalState<ProductTransactionInfo[]>
+  selectedProductsState: IExternalState<ProductTransactionInfo>;
 }
 
 const ListProducts = ({ products, selectedProductsState }: IListProductsProps) => {
 
   const { setter: setSelectedProducts, state: selectedProducts } = selectedProductsState
 
-  const handleProductSelect = (productId: string) => {
-    if (selectedProducts.includes(productId)) {
-      setSelectedProducts(selectedProducts.filter(id => id !== productId))
-    } else {
-      setSelectedProducts([...selectedProducts, productId])
-    }
+  // const isChecked = (id: string) => selectedProducts.some(product => product.id === id)
 
-  }
+  // const handleProductSelect = (productId: string) => {
+  //   if (isChecked(productId)) {
+  //     setSelectedProducts(selectedProducts.filter(product => product.id !== productId))
+  //   } else {
+  //     // setSelectedProducts([...selectedProducts, productId])
+  //     setSelectedProducts([...selectedProducts])
+  //   }
+
+  // }
+
+  const handleProductSelect = (productId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedProducts({ ...selectedProducts, [productId]: 1 });
+    } else {
+      const newSelected = { ...selectedProducts };
+      delete newSelected[productId];
+      setSelectedProducts(newSelected);
+    }
+  };
+
+  const handleQuantityChange = (productId: string, increment: number, max = 0) => {
+    const currentQuantity = selectedProducts[productId] || 0;
+    const newQuantity = Math.max(1, currentQuantity + increment);
+
+    if (currentQuantity >= max) return
+
+    setSelectedProducts({
+      ...selectedProducts,
+      [productId]: newQuantity
+    });
+  };
 
   return (
     <div className="flex flex-col gap-y-3">
-      {products.map(product => (
-        <Card key={product.id}>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>{product.title}</CardTitle>
-              <Checkbox
-                id={`product-${product.id}`}
-                checked={selectedProducts.includes(product.id)}
-                onCheckedChange={() => handleProductSelect(product.id)}
-              />
-            </div>
-            <CardDescription>${product.price.toFixed(2)}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">{product.description}</p>
-            <p className="text-sm text-muted-foreground">Stock: {product.stock}</p>
-          </CardContent>
-        </Card>
-      ))}
+      {products.map(product => {
+        const isSelected = (productId: string) => productId in selectedProducts;
+        const quantity = selectedProducts[product.id] || 0;
+        const max = product.stock
+
+        return (
+          <Card key={product.id}>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>{product.title}</CardTitle>
+                <div className="flex items-center gap-x-4">
+                  {isSelected(product.id) && (
+                    <div className="flex items-center gap-x-2">
+                      <Button
+                        type="button"
+                        onClick={() => handleQuantityChange(product.id, -1, max)}
+                        className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center"
+                      >
+                        -
+                      </Button>
+                      <span className="min-w-8 text-center">{quantity}</span>
+                      <Button
+                        type="button"
+                        onClick={() => handleQuantityChange(product.id, 1, max)}
+                        className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center"
+                      >
+                        +
+                      </Button>
+                    </div>
+                  )}
+                  <Checkbox
+                    id={`product-${product.id}`}
+                    checked={isSelected(product.id)}
+                    onCheckedChange={(checked) => handleProductSelect(product.id, checked as boolean)}
+                  />
+                </div>
+              </div>
+              <CardDescription>${product.price.toFixed(2)}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">{product.description}</p>
+              <p className="text-sm text-muted-foreground">Stock: {product.stock}</p>
+            </CardContent>
+          </Card>
+        )
+      })}
     </div>
   )
 }

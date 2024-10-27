@@ -17,7 +17,8 @@ export const routerPaths = {
             products: { path: "productos", label: "Productos" },
             users: { path: 'users', label: 'Usuarios', children: [
                 { path: 'new-user', label: 'Crear usuario'}
-            ] }
+            ] },
+            aboutUs: { path: 'aboutUs', label: 'Acerca de nosotros' }
         },
         
     },

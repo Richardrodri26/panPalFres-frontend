@@ -44,8 +44,8 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "",
       menus: [
         {
-          href: "/dashboard/profile",
-          label: "Perfil",
+          href: "/dashboard/aboutUs",
+          label: "Acerca de nosotros",
           active: pathname.includes("/profile"),
           icon: User,
           submenus: []

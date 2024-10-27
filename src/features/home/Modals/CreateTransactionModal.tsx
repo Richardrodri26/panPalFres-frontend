@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { CreateTransaction } from "@/features/transactions"
+import { useState } from "react"
 
 interface ICreateTransactionModalProps {
   children: React.ReactNode
@@ -7,8 +8,14 @@ interface ICreateTransactionModalProps {
 }
 
 export const CreateTransactionModal = ({ children, asChild = false }: ICreateTransactionModalProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false)
+  }
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild={asChild}>
         {children}
       </DialogTrigger>
@@ -20,7 +27,7 @@ export const CreateTransactionModal = ({ children, asChild = false }: ICreateTra
           Por favor rellena los campos solicitados.
         </DialogDescription>
 
-        <CreateTransaction />
+        <CreateTransaction closeModal={closeModal} />
 
 
       </DialogContent>

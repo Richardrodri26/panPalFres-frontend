@@ -7,7 +7,7 @@ import { panPalFresEndpoints } from '@/domain/endpoints'
 import { ValidateUserResponse } from '@/interfaces'
 import { useConfirm } from '@omit/react-confirm-dialog'
 import { Pen, Trash } from 'lucide-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useMutation } from 'react-query'
 import { toast } from 'sonner'
 import { EditUserModal } from '../modals/EditUserModal'
@@ -29,7 +29,7 @@ export const TdActionUser = ({ data }: { data: ValidateUserResponse }) => {
       }
 
     },
-    onError: (error) => {
+    onError: (_error) => {
       toast.error("Oops hubo un error al eliminar el producto")
     }
   });

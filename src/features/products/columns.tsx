@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { ProductInterface } from "@/interfaces";
 import { createColumnHelper } from "@tanstack/react-table";
 import { TdActionProduct } from "./elements/TdActionProduct";

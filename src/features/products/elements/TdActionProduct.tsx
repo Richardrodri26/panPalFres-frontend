@@ -28,7 +28,7 @@ export const TdActionProduct = ({ data }: { data: ProductInterface }) => {
       }
 
     },
-    onError: (error) => {
+    onError: (_error) => {
       toast.error("Oops hubo un error al eliminar el producto")
     }
   });

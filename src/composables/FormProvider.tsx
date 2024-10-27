@@ -48,7 +48,7 @@ interface IButtonFormProps extends ButtonProps {
 }
 
 export const ButtonForm = ({ disabled, resetForm = false, onClick, ...rest }: IButtonFormProps) => {
-  const { formState: { isValid }, reset } = useFormContext()
+  const { formState: { isValid } } = useFormContext()
   return (
     <Button onClick={(e) => {onClick && onClick(e)}} disabled={!isValid || disabled} {...rest}  />
   )

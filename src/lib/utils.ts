@@ -51,3 +51,11 @@ export function formatDate(dateTime: string | null | undefined, format = 'MMMM D
 }
 
 export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+
+export const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'COP'
+  }).format(amount);
+};

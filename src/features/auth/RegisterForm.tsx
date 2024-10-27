@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { BasicFormProvider, InputForm } from "@/composables";
 import { registerSchema, registerSchemaType } from "..";
-import { Button, FormButton } from "@/components/ui/button";
+import { FormButton } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+// import { useState } from "react";
 
 export const RegisterForm = () => {
-  const [email, setEmail] = useState<string>(""); // Almacenar el email
-  const [password, setPassword] = useState<string>(""); // Almacenar la contraseña
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Almacenar el mensaje de error si ocurre
+  // const [email, setEmail] = useState<string>(""); // Almacenar el email
+  // const [password, setPassword] = useState<string>(""); // Almacenar la contraseña
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null); // Almacenar el mensaje de error si ocurre
   const navigate = useNavigate();
 
   // Enviar informacion al backend
@@ -34,9 +34,9 @@ export const RegisterForm = () => {
       return data; // Si quieres devolver los datos de la respuesta
       
     } catch (error) {
-      setErrorMessage(
-        "Hubo un problema con el registro. Por favor, verifica tus datos."
-      );
+      // setErrorMessage(
+      //   "Hubo un problema con el registro. Por favor, verifica tus datos."
+      // );
       console.error("Hubo un problema en la solicitud de registro:", error);
     }
   };
@@ -47,9 +47,9 @@ export const RegisterForm = () => {
   };
 
   // Función para redirigir a la página de registro
-  const goToRegister = () => {
-    navigate("/registrarse");
-  };
+  // const goToRegister = () => {
+  //   navigate("/registrarse");
+  // };
 
   
     

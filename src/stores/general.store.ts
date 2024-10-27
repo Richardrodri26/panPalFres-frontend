@@ -1,6 +1,6 @@
 "use client";
 import { LoginInterface } from "@/interfaces";
-import { create, StateCreator } from "zustand";
+import { StateCreator } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
@@ -50,7 +50,7 @@ export type IGeneralStore = IGeneral & IGeneralActions;
 const storeApi: StateCreator<
   IGeneralStore,
   [["zustand/devtools", never], ["zustand/immer", never]]
-> = (set, get) => ({
+> = (set) => ({
   isOpenMenu: false,
 
   setLoginUser: (data) => {

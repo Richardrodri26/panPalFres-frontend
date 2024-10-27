@@ -7,7 +7,7 @@ import { useFormContext } from "react-hook-form"
 
 export const AddPurchaseForm = () => {
 
-  const onSubmit = (data: addPurchaseSchemaType) => {
+  const onSubmit = (_data: addPurchaseSchemaType) => {
 
   }
 
@@ -23,7 +23,7 @@ export const AddPurchaseForm = () => {
 }
 
 const AddPurchaseFormButton = () => {
-  const { reset, setValue } = useFormContext();
+  const { setValue } = useFormContext();
   const onResetForm = () => {
     setValue("product", "")
     setValue("quantity", "1")

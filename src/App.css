@@ -1,0 +1,26 @@
+
+
+/* styles.vss */
+.scroll__app {
+  scrollbar-width: thin; /* Scroll delgado para Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Pulgar semi-transparente, sin fondo visible */
+
+  /* Para navegadores basados en WebKit (Chrome, Safari, Edge) */
+}
+
+.scroll__app::-webkit-scrollbar {
+  width: 6px; /* Scroll más delgado */
+}
+
+.scroll__app::-webkit-scrollbar-track {
+  background: transparent; /* Eliminar el track de fondo */
+}
+
+.scroll__app::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2); /* Color del pulgar: semi-transparente */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+.scroll__app::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4); /* Pulgar más visible al pasar el ratón */
+}

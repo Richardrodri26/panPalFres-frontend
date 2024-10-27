@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { CreateProductForm } from "../forms/CreateProduct";
 import { BasicFormProvider } from "@/composables";
 import { createProductSchema, createProductSchemaType } from "../schema";
