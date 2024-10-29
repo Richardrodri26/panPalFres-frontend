@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BasicFormProvider, InputForm } from "@/composables";
 import { registerSchema, registerSchemaType } from "..";
 import { FormButton } from "@/components/ui/button";
@@ -8,73 +7,67 @@ import { useGeneral } from "@/stores";
 import Cookies from "js-cookie";
 
 export const RegisterForm = () => {
-  const [email, setEmail] = useState<string>(""); // Almacenar el email
-  const [password, setPassword] = useState<string>(""); // Almacenar la contraseña
+  //const [email, setEmail] = useState<string>(""); // Almacenar el email
+  //const [password, setPassword] = useState<string>(""); // Almacenar la contraseña
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Almacenar el mensaje de error si ocurre
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Estado de carga
   const navigate = useNavigate();
-  const setLoginUser = useGeneral(state => state.setLoginUser)
+  const setLoginUser = useGeneral((state) => state.setLoginUser);
 
-  // Enviar informacion al backend
-
+  // Enviar información al backend
   const registerBackend = async (dataForm: registerSchemaType) => {
+    setIsLoading(true);
+    setErrorMessage(null); // Limpiar cualquier error previo
+
     try {
-      const createUser = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch("http://localhost:3000/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...dataForm,
-          fullName: 'PRUEBA DORANCE'
-        }),
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(dataForm), // Aquí se envían los datos del formulario
       });
 
-      if (!createUser.ok) {
-        // Si el código de estado no está en el rango 200-299
-        throw new Error(`Error: ${createUser.status} ${createUser.statusText}`);
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        setErrorMessage(errorResponse.message || "Error al registrar"); // Muestra el mensaje de error del backend
+        return;
       }
 
-      const data = await createUser.json(); // Obtener los datos en formato JSON
+      const data = await response.json();
       console.log("Usuario registrado exitosamente:", data);
-      setLoginUser(data)
+      setLoginUser(data);
+      Cookies.set(import.meta.env.VITE_APP_KEY_COOKIE_SESSION, data?.token);
+      navigate("/");
 
-      Cookies.set(import.meta.env.VITE_APP_KEY_COOKIE_SESSION, data?.token)
-
-      navigate("/dashboard");
-
-      // return data; // Si quieres devolver los datos de la respuesta
-      
     } catch (error) {
-      setErrorMessage(
-        "Hubo un problema con el registro. Por favor, verifica tus datos."
-      );
+      setErrorMessage("Error de conexión. Por favor, inténtalo de nuevo más tarde.");
       console.error("Hubo un problema en la solicitud de registro:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
   // Función para manejar el submit del formulario
   const onSubmit = (data: registerSchemaType) => {
-    registerBackend(data); // Llamar a la función de login
-    
-  };
-
-  // Función para redirigir a la página de registro
-  const goToRegister = () => {
-    navigate("/registrarse");
+    console.log(data); // Revisa qué datos se están enviando
+    registerBackend(data); // Llamar a la función de registro
   };
 
   
-    
-
   return (
     <BasicFormProvider submit={onSubmit} schema={registerSchema}>
-      <p className="text-[#605DEC] text-xl font-semibold">Registro de usuario</p>
+      <p className="text-[#605DEC] text-xl font-semibold">
+        Registro de usuario
+      </p>
 
-      <InputForm name="email" label="Correo electronico" />
-      <InputForm name="password" label="Contraseña" />
+      {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
-      <FormButton className="mt-5">
-        Continuar
+      <InputForm name="email" label="Correo electrónico" />
+      <InputForm name="password" label="Contraseña"/>
+
+      <FormButton className="mt-5" disabled={isLoading}>
+        {isLoading ? "Registrando..." : "Continuar"} 
       </FormButton>
+      
     </BasicFormProvider>
   );
 };
