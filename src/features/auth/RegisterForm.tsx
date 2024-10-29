@@ -3,13 +3,16 @@ import { BasicFormProvider, InputForm } from "@/composables";
 import { registerSchema, registerSchemaType } from "..";
 import { FormButton } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-// import { useState } from "react";
+import { useState } from "react";
+import { useGeneral } from "@/stores";
+import Cookies from "js-cookie";
 
 export const RegisterForm = () => {
   // const [email, setEmail] = useState<string>(""); // Almacenar el email
   // const [password, setPassword] = useState<string>(""); // Almacenar la contraseña
   // const [errorMessage, setErrorMessage] = useState<string | null>(null); // Almacenar el mensaje de error si ocurre
   const navigate = useNavigate();
+  const setLoginUser = useGeneral(state => state.setLoginUser)
 
   // Enviar informacion al backend
 
@@ -20,7 +23,10 @@ export const RegisterForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataForm),
+        body: JSON.stringify({
+          ...dataForm,
+          fullName: 'PRUEBA DORANCE'
+        }),
       });
 
       if (!createUser.ok) {
@@ -30,8 +36,13 @@ export const RegisterForm = () => {
 
       const data = await createUser.json(); // Obtener los datos en formato JSON
       console.log("Usuario registrado exitosamente:", data);
+      setLoginUser(data)
 
-      return data; // Si quieres devolver los datos de la respuesta
+      Cookies.set(import.meta.env.VITE_APP_KEY_COOKIE_SESSION, data?.token)
+
+      navigate("/dashboard");
+
+      // return data; // Si quieres devolver los datos de la respuesta
       
     } catch (error) {
       // setErrorMessage(
@@ -43,7 +54,7 @@ export const RegisterForm = () => {
   // Función para manejar el submit del formulario
   const onSubmit = (data: registerSchemaType) => {
     registerBackend(data); // Llamar a la función de login
-    navigate("/dashboard");
+    
   };
 
   // Función para redirigir a la página de registro
@@ -66,5 +77,4 @@ export const RegisterForm = () => {
       </FormButton>
     </BasicFormProvider>
   );
-  }
-
+};
