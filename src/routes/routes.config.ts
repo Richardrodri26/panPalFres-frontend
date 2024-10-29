@@ -4,7 +4,7 @@ export interface INavMenuOptions {
   label: string;
   key: string;
   path: string;
-  permission: string[];
+  permission?: string[];
   children?: INavMenuOptions[]
 }
 

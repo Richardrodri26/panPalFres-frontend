@@ -33,6 +33,8 @@ export const LoginForm = () => {
           navigate("/dashboard")
         }
       } catch (error) {
+        console.error("Error en el login:", error);
+        
       }
     }
   })
