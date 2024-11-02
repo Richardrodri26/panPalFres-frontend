@@ -1,15 +1,19 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom";
 import { useSidebarToggle, useStore, useValidateUser } from "@/hooks";
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 import { Sidebar } from "@/composables/SideMenu";
 import { Skeleton } from "../ui/skeleton";
-
+import { Footer } from "@/composables/SideMenu/Footer"; // Asegúrate de que esto esté importado
 
 export const AdminLayout = () => {
-  const { isLoading } = useValidateUser()
+  const { isLoading, error } = useValidateUser();
   const sidebar = useStore(useSidebarToggle, (state) => state);
 
   if (!sidebar) return null;
+
+  if (error) {
+    return <div>Error al cargar la información del usuario.</div>;
+  }
 
   return (
     <>
@@ -30,7 +34,7 @@ export const AdminLayout = () => {
             )
         }
       </main>
-
+      <Footer />
     </>
-  )
+  );
 }
