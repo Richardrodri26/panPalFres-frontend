@@ -6,7 +6,7 @@ import insta from "/instagram.png";
 
 export function Footer() {
   return (
-    <footer className="z-20 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 py-8 mt-4">
+    <footer className=" z-20 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 py-8 mt-auto">
       <div className="mx-4 md:mx-8 flex flex-col md:flex-row md:justify-between items-center space-y-4 md:space-y-0">
         <div className="sb_footer-links-div ">
           <h4 className="font-semibold text-center md:text-left">
