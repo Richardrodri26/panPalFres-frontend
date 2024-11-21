@@ -8,6 +8,7 @@ import { useSidebarToggle, useStore } from "@/hooks";
 import { Link } from "react-router-dom";
 import { Menu } from "./Menu";
 
+
 export function Sidebar() {
   const sidebar = useStore(useSidebarToggle, (state) => state);
   
@@ -16,7 +17,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed top-0 left-0 z-20 h-screen -translate-x-full lg:translate-x-0 transition-[width] ease-in-out duration-300",
+        " top-0 left-0 z-20 h-screen -translate-x-full lg:translate-x-0 transition-[width] ease-in-out duration-300",
         sidebar?.isOpen === false ? "w-[90px]" : "w-72"
       )}
     >

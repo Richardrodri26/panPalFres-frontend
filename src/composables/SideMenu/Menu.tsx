@@ -9,7 +9,7 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-  TooltipProvider
+  TooltipProvider,
 } from "@/components/ui/tooltip";
 import { CollapseMenuButton } from "./Collapse-menu-button";
 import { getMenuList } from "@/lib/menu-list";
@@ -21,16 +21,16 @@ interface MenuProps {
 }
 
 export function Menu({ isOpen }: MenuProps) {
-  const navigate = useNavigate()
-  const logout = useGeneral(state => state.logout)
+  const navigate = useNavigate();
+  const logout = useGeneral((state) => state.logout);
   const pathname = useLocation().pathname;
   const menuList = getMenuList(pathname);
   // const router = useRouter()
 
   const onLogout = () => {
-    logout()
-    navigate('/')
-  }
+    logout();
+    navigate("/");
+  };
 
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
@@ -112,10 +112,17 @@ export function Menu({ isOpen }: MenuProps) {
             </li>
           ))}
 
-          <li className={cn("w-full  flex items-end", { "grow": isOpen === true })}>
+          <li
+            className={cn("w-full  flex items-end", { grow: isOpen === true })}
+          >
             <TooltipProvider disableHoverableContent>
               <Tooltip delayDuration={100}>
-                <div className={cn("mt-auto w-full flex-1 flex items-center gap-2 justify-between", { "mt-0": isOpen === false })}>
+                <div
+                  className={cn(
+                    "mt-auto w-full flex-1 flex items-center gap-2 justify-between",
+                    { "mt-0": isOpen === false }
+                  )}
+                >
                   <TooltipTrigger asChild>
                     <Button
                       onClick={onLogout}
@@ -131,7 +138,7 @@ export function Menu({ isOpen }: MenuProps) {
                           isOpen === false ? "opacity-0 hidden" : "opacity-100"
                         )}
                       >
-                        Cerrar sesion
+                        Cerrar sesión
                       </p>
                     </Button>
                   </TooltipTrigger>

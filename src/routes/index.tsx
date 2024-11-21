@@ -3,6 +3,7 @@ import { adminRoutes, routerPaths } from "./routes.config";
 import { AboutUs, HomePage, LoginPage, Products, RegisterPage, Users } from "@/pages";
 import { AdminLayout } from "@/components/Layouts";
 
+
 export const appRouter = createBrowserRouter([
     {
         path: "/",
@@ -42,13 +43,18 @@ export const appRouter = createBrowserRouter([
                             { path: '', element: <AboutUs /> }
                         ]
                     },
+                    
                 ]
             },
+            
             {
                 path: "*",
                 // element: <NoFound />
                 element: <>Not found</>
             }
+
+            
         ]
     },
+    
 ])
