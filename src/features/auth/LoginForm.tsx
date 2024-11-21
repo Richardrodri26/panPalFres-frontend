@@ -34,7 +34,7 @@ export const LoginForm = () => {
         }
       } catch (error) {
         console.error("Error en el login:", error);
-        
+
       }
     }
   })
@@ -58,9 +58,9 @@ export const LoginForm = () => {
     // El schema es para validar los campos de formulario
     <BasicFormProvider submit={onSubmit} schema={loginSchema}>
       <h2 className="text-3xl font-semibold text-[#605DEC] p-0 text-center ">
-        LOGIN
+        Iniciar sesión
       </h2>
-      <p className="text-[#c7b871] text-xl font-bold mt-4">Iniciar sesión</p>
+      {/* <p className="text-[#c7b871] text-xl font-bold mt-4">Iniciar sesión</p> */}
 
 
       {/* En el input se debe enviar como name el nombre de la propiedad como se declaro en el schema */}
